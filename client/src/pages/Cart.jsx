@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { dummyAddress } from "../assets/assets";
-import axios from "axios";
 import toast from "react-hot-toast";
 const Cart = () => {
   const {
@@ -13,17 +11,18 @@ const Cart = () => {
     setCartItems,
     removeFromCart,
     updateCartItem,
-    axios,
-    user,
+    addresses,
   } = useAppContext();
 
   // state to store the products available in cart
   const [cartArray, setCartArray] = useState([]);
   // state to address
-  const [address, setAddress] = useState([]);
+  const [address, setAddress] = useState(addresses);
   const [showAddress, setShowAddress] = useState(false);
   // state for selected address
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(
+    addresses.length > 0 ? addresses[0] : null
+  );
   const [paymentOption, setPaymentOption] = useState("COD");
 
   const getCart = () => {
@@ -35,28 +34,6 @@ const Cart = () => {
     }
     setCartArray(tempArray);
   };
-
-  const getAddress = async () => {
-    try {
-      const { data } = await axios.get("/api/address/get");
-      if (data.success) {
-        setAddress(data.addresses);
-        if (data.addresses.length > 0) {
-          setSelectedAddress(data.addresses[0]);
-        }
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-  useEffect(() => {
-    if (user) {
-      getAddress();
-    }
-  }, [user]);
-
   useEffect(() => {
     if (products.length > 0 && cartItems) {
       getCart();
@@ -69,20 +46,15 @@ const Cart = () => {
       }
       // place order with cod
       if (paymentOption === "COD") {
-        const { data } = await axios.post("/api/order/cod", {
-          items: cartArray.map((item) => ({
-            product: item._id,
-            quantity: item.quantity,
-          })),
-          address: selectedAddress._id,
-        });
-        if (data.success) {
-          toast.success(data.message);
-          setCartItems({});
-          navigate("/my-orders");
-        } else {
-          toast.error(data.message);
-        }
+        // Simulate order placement
+        toast.success("Order placed successfully with Cash on Delivery!");
+        setCartItems({});
+        navigate("/my-orders");
+      } else {
+        // Simulate online payment
+        toast.success(`Payment successful via ${paymentOption}! Order placed.`);
+        setCartItems({});
+        navigate("/my-orders");
       }
     } catch (error) {
       toast.error(error.message);
@@ -117,7 +89,7 @@ const Cart = () => {
               >
                 <img
                   className="max-w-full h-full object-cover"
-                  src={`http://localhost:5000/images/${product.image[0]}`}
+                  src={product.image[0]}
                   alt={product.name}
                 />
               </div>
@@ -247,7 +219,9 @@ const Cart = () => {
             className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none"
           >
             <option value="COD">Cash On Delivery</option>
-            <option value="Online">Online Payment</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="PayPal">PayPal</option>
+            <option value="UPI">UPI</option>
           </select>
         </div>
 
@@ -276,7 +250,7 @@ const Cart = () => {
           onClick={placeOrder}
           className="w-full py-3 mt-6 cursor-pointer bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition"
         >
-          {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
+          {paymentOption === "COD" ? "Place Order" : "Pay Now"}
         </button>
       </div>
     </div>

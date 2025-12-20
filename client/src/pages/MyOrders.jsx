@@ -1,29 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { dummyOrders } from "../assets/assets";
-import { AppContext } from "../context/AppContext";
-import toast from "react-hot-toast";
+import { useState } from "react";
+import { dummyOrders } from "../assets/assets.js";
 
 const MyOrders = () => {
-  const [myOrders, setMyOrders] = useState([]);
-  const { axios, user } = useContext(AppContext);
-  const fetchOrders = async () => {
-    try {
-      const { data } = await axios.get("/api/order/user");
-      if (data.success) {
-        setMyOrders(data.orders);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      fetchOrders();
-    }
-  }, [user]);
+  const [myOrders, setMyOrders] = useState(dummyOrders);
   return (
     <div className="mt-12 pb-16">
       <div>
@@ -50,7 +29,7 @@ const MyOrders = () => {
               <div className="flex items-center mb-4 md:mb-0">
                 <div className="p-4 rounded-lg">
                   <img
-                    src={`http://localhost:5000/images/${item.product.image[0]}`}
+                    src={item.product.image[0]}
                     alt=""
                     className="w-16 h-16"
                   />

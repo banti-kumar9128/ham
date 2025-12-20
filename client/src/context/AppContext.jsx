@@ -12,8 +12,9 @@ export const AppContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(dummyProducts);
   const [cartItems, setCartItems] = useState({});
+  const [addresses, setAddresses] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   // check seller status
@@ -112,9 +113,7 @@ export const AppContextProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    fetchSeller();
-    fetchProducts();
-    fetchUser();
+    // No backend calls for auth in frontend-only mode
   }, []);
 
   // update database cart items
@@ -145,6 +144,8 @@ export const AppContextProvider = ({ children }) => {
     setShowUserLogin,
     products,
     cartItems,
+    addresses,
+    setAddresses,
     addToCart,
     updateCartItem,
     removeFromCart,

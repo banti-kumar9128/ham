@@ -14,7 +14,7 @@ const SingleProduct = () => {
     if (products.length > 0) {
       let productsCopy = products.slice();
       productsCopy = productsCopy.filter(
-        (product) => product.category === product.category
+        (item) => item.category === product.category && item._id !== product._id
       );
       setRelatedProducts(productsCopy.slice(0, 5));
     }
@@ -44,19 +44,13 @@ const SingleProduct = () => {
                   onClick={() => setThumbnail(image)}
                   className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer"
                 >
-                  <img
-                    src={`http://localhost:5000/images/${image}`}
-                    alt={`Thumbnail ${index + 1}`}
-                  />
+                  <img src={image} alt={`Thumbnail ${index + 1}`} />
                 </div>
               ))}
             </div>
 
             <div className="border border-gray-500/30 max-w-100 rounded overflow-hidden">
-              <img
-                src={`http://localhost:5000/images/${thumbnail}`}
-                alt="Selected product"
-              />
+              <img src={thumbnail} alt="Selected product" />
             </div>
           </div>
 

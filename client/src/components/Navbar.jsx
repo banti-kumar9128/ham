@@ -14,21 +14,16 @@ const Navbar = () => {
     searchQuery,
     setSearchQuery,
     cartCount,
-    axios,
   } = useAppContext();
 
   const logout = async () => {
     try {
-      const { data } = await axios.get("/api/user/logout");
-      if (data.success) {
-        setUser(null);
-        navigate("/");
-        toast.success(data.message);
-      } else {
-        toast.error(data.message);
-      }
+      // Simulate logout
+      setUser(null);
+      navigate("/");
+      toast.success("Logged out successfully");
     } catch (error) {
-      toast.error(error.message);
+      toast.error("An error occurred");
     }
   };
   useEffect(() => {
@@ -111,6 +106,12 @@ const Navbar = () => {
                 className="p-1.5 cursor-pointer"
               >
                 My Orders
+              </li>
+              <li
+                onClick={() => navigate("/add-address")}
+                className="p-1.5 cursor-pointer"
+              >
+                Manage Addresses
               </li>
               <li className="cursor-pointer p-1.5" onClick={logout}>
                 Logout
@@ -203,12 +204,12 @@ const Navbar = () => {
                 My Orders
               </li>
               <li
-                className="cursor-pointer p-1.5"
-                onClick={() => {
-                  setUser(null);
-                  navigate("/");
-                }}
+                onClick={() => navigate("/add-address")}
+                className="p-1.5 cursor-pointer"
               >
+                Manage Addresses
+              </li>
+              <li className="cursor-pointer p-1.5" onClick={logout}>
                 Logout
               </li>
             </ul>

@@ -11,20 +11,43 @@ const Auth = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const { data } = await axios.post(`/api/user/${state}`, {
-        name,
-        email,
-        password,
-      });
-      if (data.success) {
-        toast.success(data.message);
-        navigate("/");
-        setUser(data.user);
-        setShowUserLogin(false);
+      // Simulate authentication
+      if (state === "login") {
+        // Simple mock: any email/password works
+        if (email && password) {
+          toast.success("Login successful!");
+          const mockUser = {
+            _id: "mock_user_id",
+            name: "Mock User",
+            email: email,
+            cart: {},
+          };
+          setUser(mockUser);
+          setShowUserLogin(false);
+          navigate("/");
+        } else {
+          toast.error("Please enter email and password");
+        }
       } else {
-        toast.error(data.message);
+        // Register
+        if (name && email && password) {
+          toast.success("Account created successfully!");
+          const mockUser = {
+            _id: "mock_user_id",
+            name: name,
+            email: email,
+            cart: {},
+          };
+          setUser(mockUser);
+          setShowUserLogin(false);
+          navigate("/");
+        } else {
+          toast.error("Please fill all fields");
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("An error occurred");
+    }
   };
   return (
     <div
